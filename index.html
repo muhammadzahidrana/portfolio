@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Muhammad Zahid — Store Inventory Controller, Operations, Store Admin, Stock controller Logistics & E-Commerce . Building Scalable, Secure & High-Performance Backend Systems.">
+<meta name="keywords" content="Store Inventory Controller, Operations, Store Admin, Stock controller Logistics & E-Commerce , Muhammad Zahid">
+<title>Muhammad Zahid | Store Inventory Controller, Operations, Store Admin, Stock controller Logistics & E-Commerce </title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06090f;
+  --bg2: #0a0f1a;
+  --bg3: #0f1622;
+  --bg4: #141d2e;
+  --accent: #00c8ff;
+  --accent2: #7c3aed;
+  --accent3: #00ffaa;
+  --accent-dim: rgba(0,200,255,0.12);
+  --text: #dde8f5;
+  --muted: #5a6a82;
+  --border: rgba(0,200,255,0.18);
+  --glow: 0 0 24px rgba(0,200,255,0.35);
+  --glow-s: 0 0 12px rgba(0,200,255,0.2);
+  --r: 14px;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 10px; }
+
+/* ─── CANVAS BG ─── */
+#bg-canvas {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none; opacity: 0.45;
+}
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 5%;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(20px);
+  background: rgba(6,9,15,0.7);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 40px rgba(0,0,0,0.6); }
+
+.nav-logo {
+  font-size: 1.2rem; font-weight: 800;
+  color: var(--text);
+  letter-spacing: -.5px;
+}
+.nav-logo span { color: var(--accent); }
+
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  color: var(--muted); font-size: .85rem; font-weight: 600;
+  text-decoration: none; letter-spacing: .5px; text-transform: uppercase;
+  position: relative; transition: color .25s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0;
+  width: 0; height: 1.5px; background: var(--accent);
+  transition: width .3s;
+}
+.nav-links a:hover { color: var(--accent); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  padding: .45rem 1.2rem;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  color: var(--accent) !important;
+  font-size: .82rem !important;
+  transition: background .25s, box-shadow .25s !important;
+}
+.nav-cta:hover { background: var(--accent-dim) !important; box-shadow: var(--glow-s); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 24px; height: 2px; background: var(--text); transition: .3s; border-radius: 2px; }
+.hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ─── HERO ─── */
+#hero {
+  position: relative; z-index: 1;
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 120px 5% 80px;
+  overflow: hidden;
+}
+
+.hero-inner {
+  max-width: 900px; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 1.5rem;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .35rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: .78rem; color: var(--accent);
+  background: var(--accent-dim);
+  animation: fadeDown .6s ease forwards;
+}
+.hero-badge .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent3);
+  animation: pulse 2s infinite;
+}
+
+.hero-name {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  color: var(--text);
+  animation: fadeUp .7s .1s ease both;
+font-size: 53px;
+}
+.hero-name .accent-word { color: var(--accent); }
+
+.hero-title-wrap {
+  font-family: var(--font-mono);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  color: var(--muted);
+  animation: fadeUp .7s .2s ease both;
+  min-height: 2rem;
+}
+.cursor-blink {
+  display: inline-block; width: 2px; height: 1.1em;
+  background: var(--accent); margin-left: 3px;
+  vertical-align: middle;
+  animation: blink 1s infinite;
+}
+
+.hero-tagline {
+  font-size: clamp(.95rem, 2vw, 1.15rem);
+  color: var(--muted); max-width: 540px;
+  animation: fadeUp .7s .3s ease both;
+  line-height: 1.7;
+}
+
+.hero-ctas {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  animation: fadeUp .7s .4s ease both;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .75rem 1.8rem;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-weight: 700; font-size: .9rem;
+  cursor: pointer; transition: all .25s;
+  text-decoration: none;
+  border: none; outline: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #06090f;
+  box-shadow: var(--glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(0,200,255,.55); }
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); box-shadow: var(--glow-s); }
+
+.hero-stats {
+  display: flex; gap: 2.5rem; flex-wrap: wrap;
+  animation: fadeUp .7s .5s ease both;
+  margin-top: .5rem;
+}
+.stat { text-align: left; }
+.stat-num {
+  font-size: 2rem; font-weight: 800;
+  color: var(--accent); line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label { font-size: .78rem; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; margin-top: .2rem; }
+
+/* ─── CODE RAIN ─── */
+.code-rain {
+  position: absolute; right: -2%; top: 10%;
+  width: min(480px, 45vw);
+  height: 75vh;
+  pointer-events: none;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 30%, black 70%, transparent);
+  opacity: .18;
+  animation: fadeUp .8s .3s ease both;
+}
+.code-col {
+  position: absolute; top: 0;
+  font-family: var(--font-mono); font-size: .72rem;
+  color: var(--accent);
+  display: flex; flex-direction: column; gap: .4rem;
+  animation: rainFall linear infinite;
+  opacity: .7;
+}
+
+/* ─── SECTIONS COMMON ─── */
+section { position: relative; z-index: 1; padding: 100px 5%; }
+.section-label {
+  font-family: var(--font-mono); font-size: .78rem;
+  color: var(--accent); letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: .75rem;
+  display: flex; align-items: center; gap: .75rem;
+}
+.section-label::before {
+  content: ''; display: block; width: 30px; height: 1px; background: var(--accent);
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; letter-spacing: -1px;
+  margin-bottom: 1rem;
+}
+
+/* ─── REVEAL ─── */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.up { opacity: 1; transform: none; }
+
+/* ─── GLASS CARD ─── */
+.glass {
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  backdrop-filter: blur(16px);
+}
+
+/* ─── ABOUT ─── */
+#about { background: var(--bg2); }
+.about-grid {
+  display: grid; grid-template-columns: 280px 1fr; gap: 4rem; align-items: center;
+  max-width: 1000px; margin: 0 auto; margin-top: 3rem;
+}
+.about-photo-wrap {
+  position: relative; aspect-ratio: 1;
+  border-radius: 50%;
+}
+.about-photo-ring {
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent), var(--accent2), var(--accent3), var(--accent));
+  animation: spin 6s linear infinite;
+  z-index: 0;
+}
+.about-photo-mask {
+  position: relative; z-index: 1;
+  width: 100%; height: 100%;
+  border-radius: 50%; overflow: hidden;
+  background: var(--bg3);
+  border: 4px solid var(--bg2);
+  display: flex; align-items: center; justify-content: center;
+}
+.about-photo-mask img {
+  width: 100%; height: 100%; object-fit: cover;
+  border-radius: 50%;
+}
+.about-photo-placeholder {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--bg3), var(--bg4));
+  border-radius: 50%;
+}
+.about-photo-placeholder svg { width: 55%; height: 55%; opacity: .4; }
+
+.about-text p {
+  color: var(--muted); line-height: 1.8; margin-bottom: 1rem; font-size: 1rem;
+}
+.about-text p strong { color: var(--text); }
+.about-chips { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.5rem; }
+.chip {
+  padding: .3rem .85rem;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: .74rem;
+  color: var(--accent); background: var(--accent-dim);
+}
+
+/* ─── SKILLS ─── */
+#skills { background: var(--bg); }
+.skills-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem; margin-top: 3rem;
+}
+.skill-card {
+  padding: 1.4rem 1.6rem 1.2rem;
+  transition: transform .25s, box-shadow .25s, border-color .25s;
+  cursor: default;
+}
+.skill-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: var(--glow-s), 0 10px 40px rgba(0,0,0,.4);
+}
+.skill-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.skill-name { font-weight: 700; font-size: .95rem; }
+.skill-pct { font-family: var(--font-mono); font-size: .82rem; color: var(--accent); font-weight: 600; }
+.skill-bar { height: 4px; background: rgba(255,255,255,.06); border-radius: 10px; overflow: hidden; }
+.skill-fill {
+  height: 100%; width: 0; border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  box-shadow: 0 0 8px rgba(0,200,255,.5);
+}
+.skill-icon { font-size: 1.4rem; margin-bottom: .3rem; }
+
+/* ─── PROJECTS ─── */
+#projects { background: var(--bg2); }
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+.project-card {
+  padding: 2rem;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s, border-color .3s;
+}
+.project-card::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,200,255,.04), rgba(124,58,237,.04));
+  opacity: 0; transition: opacity .3s;
+}
+.project-card:hover { transform: translateY(-6px); border-color: var(--accent); box-shadow: var(--glow), 0 20px 60px rgba(0,0,0,.5); }
+.project-card:hover::before { opacity: 1; }
+
+.project-num {
+  font-family: var(--font-mono); font-size: .72rem;
+  color: var(--accent); margin-bottom: .75rem; letter-spacing: 1px;
+}
+.project-title { font-size: 1.2rem; font-weight: 800; margin-bottom: .75rem; }
+.project-desc { color: var(--muted); font-size: .9rem; line-height: 1.7; margin-bottom: 1.25rem; }
+.project-features { list-style: none; margin-bottom: 1.5rem; }
+.project-features li {
+  font-size: .85rem; color: var(--muted); padding: .25rem 0;
+  display: flex; align-items: flex-start; gap: .5rem;
+}
+.project-features li::before { content: '▸'; color: var(--accent); flex-shrink: 0; font-size: .9em; margin-top: .05em; }
+.badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.5rem; }
+.badge {
+  font-family: var(--font-mono); font-size: .7rem;
+  padding: .2rem .6rem; border-radius: 4px;
+  border: 1px solid rgba(0,200,255,.2);
+  color: var(--accent); background: rgba(0,200,255,.06);
+}
+.btn-github {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .55rem 1.2rem;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: var(--font-mono); font-size: .8rem; color: var(--text);
+  text-decoration: none; transition: all .25s;
+   pointer-events: auto;  position: relative;
+}
+.btn-github:hover { border-color: var(--accent); color: var(--accent); box-shadow: var(--glow-s); }
+.btn-github svg { width: 16px; height: 16px; }
+
+/* ─── STRENGTHS ─── */
+#strengths { background: var(--bg); }
+.strengths-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.25rem; margin-top: 3rem; }
+.strength-card {
+  padding: 2rem 1.5rem; text-align: center;
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.strength-card:hover { transform: translateY(-4px); border-color: var(--accent2); box-shadow: 0 0 20px rgba(124,58,237,.2); }
+.strength-icon {
+  font-size: 2rem; margin-bottom: 1rem;
+  display: block;
+}
+.strength-title { font-weight: 700; font-size: .95rem; margin-bottom: .4rem; }
+.strength-desc { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+
+/* ─── CONTACT ─── */
+#contact { background: var(--bg2); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 3rem; max-width: 1000px; }
+.contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+.contact-info p { color: var(--muted); line-height: 1.7; }
+.contact-links { display: flex; flex-direction: column; gap: .75rem; }
+.contact-link {
+  display: flex; align-items: center; gap: .85rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px; text-decoration: none;
+  transition: all .25s;
+  color: var(--text);
+}
+.contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateX(4px); box-shadow: var(--glow-s); }
+.contact-link-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: var(--accent-dim);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.contact-link-text { font-size: .9rem; font-weight: 600; }
+.contact-link-sub { font-size: .75rem; color: var(--muted); }
+  .btn-download {
+    border: 1px solid rgba(0,255,157,0.3);
+    color: var(--accent3);
+    background: rgba(0,255,157,0.06);
+    display: flex; align-items: center;
+  }
+  .btn-download:hover { border-color: var(--accent3); background: rgba(0,255,157,0.12); box-shadow: 0 0 30px rgba(0,255,157,0.2); transform: translateY(-2px); }
+
+.contact-form { display: flex; flex-direction: column; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: .4rem; }
+.form-group label { font-size: .8rem; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; font-family: var(--font-mono); }
+.form-group input, .form-group textarea {
+  background: rgba(255,255,255,.03); border: 1px solid var(--border);
+  border-radius: 8px; padding: .8rem 1rem;
+  color: var(--text); font-family: var(--font-display); font-size: .9rem;
+  outline: none; transition: border-color .25s, box-shadow .25s;
+  resize: none;
+}
+.form-group input:focus, .form-group textarea:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,200,255,.08);
+}
+.form-group textarea { height: 130px; }
+.btn-send {
+  padding: .85rem;
+  font-size: .95rem; font-weight: 800;
+  border: none; cursor: pointer;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #fff; border-radius: 8px;
+  transition: all .25s; position: relative; overflow: hidden;
+}
+.btn-send:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,200,255,.4); }
+.btn-send.sent { background: var(--accent3); color: #06090f; }
+
+/* ─── FOOTER ─── */
+footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 2rem 5%;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: .8rem; color: var(--muted);
+}
+footer span { color: var(--accent); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,255,170,.4); } 50% { box-shadow: 0 0 0 5px rgba(0,255,170,0); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rainFall { from { transform: translateY(-100%); } to { transform: translateY(100vh); } }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .about-grid { grid-template-columns: 1fr; text-align: center; gap: 2.5rem; }
+  .about-photo-wrap { width: 200px; margin: 0 auto; }
+  .about-chips { justify-content: center; }
+  .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .code-rain { display: none; }
+}
+@media (max-width: 640px) {
+  nav { padding: 0 4%; }
+  .nav-links { display: none; position: fixed; inset: 68px 0 0 0; background: rgba(6,9,15,.97); flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; z-index: 99; }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex; }
+  section { padding: 70px 5%; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .strengths-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 400px) {
+  .strengths-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">MZ<span>.</span></div>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#strengths">Expertise</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+   <a href="M_Zahid_CV.pdf" download="M_Zahid_CV.pdf" class="btn btn-download" style="padding:0.55rem 1.2rem;font-size:0.7rem;display:flex;align-items:center;gap:0.4rem;">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    CV
+  </a>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="code-rain" id="codeRain"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      <span>Available for Opportunities</span>
+    </div>
+    <h1 class="hero-name">
+      Muhammad<br><span class="accent-word">Zahid</span>
+    </h1>
+    <div class="hero-title-wrap">
+      <span id="typed-text"></span><span class="cursor-blink"></span>
+    </div>
+    <p class="hero-tagline">
+      Store Inventory Controller, Operations, Store Admin<br>
+      Stock controller Logistics & E-Commerce 
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+        View Companies
+      </a>
+      <a href="#contact" class="btn btn-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Contact Me
+      </a>
+        <a href="M_Zahid_CV.pdf" download="M_Zahid_CV.pdf" class="btn btn-download">Download CV</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num" data-count="12">0</div><div class="stat-label">Projects Built</div></div>
+      <div class="stat"><div class="stat-num" data-count="7">0</div><div class="stat-label">Years Exp</div></div>
+      <div class="stat"><div class="stat-num" data-count="100">0</div><div class="stat-label">APIs Designed</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="section-label">01 &mdash; About</p>
+    <h2 class="section-title">Who I Am</h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-photo-wrap">
+      <div class="about-photo-ring"></div>
+      <div class="about-photo-mask">
+        <!-- Replace src below with your actual photo URL -->
+        <div class="about-photo-mask">
+  <img src="profile.png" alt="My Photo" class="about-photo">
+</div>
+      </div>
+    </div>
+    <div class="about-text">
+      <p>Detail-oriented and highly organized professional with experience in store inventory management, stock control, warehouse operations, logistics coordination, and e-commerce support. Skilled in maintaining accurate inventory records, monitoring stock levels, processing goods receipts and dispatches, coordinating with suppliers, and ensuring efficient day-to-day store operations. Experienced in inventory audits, stock reconciliation, purchase order processing, and preparing operational reports while maintaining high levels of accuracy.
+
+        Proficient in ERP systems, Microsoft Excel, Microsoft Office, inventory management software, barcode scanning systems, and data entry. Strong understanding of warehouse procedures, logistics coordination, order fulfillment, and e-commerce operations. Adept at working in fast-paced environments, solving operational issues, and collaborating with cross-functional teams to improve efficiency and customer satisfaction.
+        A dependable and proactive team player with excellent organizational, communication, and problem-solving skills, committed to maintaining inventory accuracy, optimizing operational processes, and supporting business growth. </p>
+    
+    
+      <div class="about-chips">
+        <span class="chip">Microsoft Excel</span>
+        <span class="chip">WMS</span>
+        <span class="chip">SAP</span>
+        <span class="chip">Power BI</span>
+        <span class="chip">LS Central</span>
+        <span class="chip">MicroStrategy</span>
+        <span class="chip">Seagate</span>
+        <span class="chip">RFID</span>
+        <span class="chip">SIM</span>
+        <span class="chip">E-Commerce Ops</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal">
+    <p class="section-label">02 &mdash; Skills</p>
+    <h2 class="section-title">Technical Stack</h2>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-card glass reveal" data-skill="95">
+      <div class="skill-icon">🐘</div>
+      <div class="skill-top"><span class="skill-name">Inventory & Stock Control</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon">🔴</div>
+      <div class="skill-top"><span class="skill-name">Supply Chain Coordination</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon">🔥</div>
+      <div class="skill-top"><span class="skill-name">E-Commerce Operations</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon">🎨</div>
+      <div class="skill-top"><span class="skill-name">Last Mile Delivery</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon"></div>
+      <div class="skill-top"><span class="skill-name">Team Training & Leadership</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon">🔴</div>
+      <div class="skill-top"><span class="skill-name">Vendor Management</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+
+    <div class="skill-card glass reveal" data-skill="93">
+      <div class="skill-icon">🔴</div>
+      <div class="skill-top"><span class="skill-name">Customer After-Sales</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="90">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-top"><span class="skill-name">RFID & Barcode Systems</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="88">
+      <div class="skill-icon">🗄️</div>
+      <div class="skill-top"><span class="skill-name">Process Optimization</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+
+    <div class="skill-card glass reveal" data-skill="85">
+      <div class="skill-icon">📊</div>
+      <div class="skill-top"><span class="skill-name">New Store Openings (NSO)</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+    <div class="skill-card glass reveal" data-skill="85">
+      <div class="skill-icon">📊</div>
+      <div class="skill-top"><span class="skill-name">SAP</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+    <div class="skill-card glass reveal" data-skill="85">
+      <div class="skill-icon">📊</div>
+      <div class="skill-top"><span class="skill-name">Power BI</span><span class="skill-pct">100%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">03 &mdash; Experienced</p>
+    <h2 class="section-title">Companies I've Worked With</h2>
+  </div>
+  <div class="projects-grid">
+    
+    <div class="project-card glass reveal">
+      <div class="project-num">AMIRI</div>
+      <h3 class="project-title">Inventory Controller & Store Operations Associate</h3>
+      <ul class="project-features">
+        <li>Maintain stock inventory in perfect condition with logical and efficient stockroom organization (products & packaging).</li>
+        <li>Manage delivery operations, receive, prepare, replenish and organize stock accurately and quickly.</li>
+        <li> Ensure right products are available on the sales floor to support store performance and client experience. </li>
+        <li>Improve stock availability by liaising with Supply Chain teams and managing stock transfer requests and special product orders (My Product Request). ▸ Plan and execute inventory counts; manage all stock movements and related administration. ▸ Proactively identify opportunities to optimize stock processes and workflows.</li>
+      </ul>
+    
+      <a href="https://amiri.com/en-ae" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.640.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        View website
+      </a>
+    </div>
+
+    <div class="project-card glass reveal">
+      <div class="project-num">VALENTINO</div>
+      <h3 class="project-title">Store Inventory Controller / Stock Controller role</h3>
+
+      <ul class="project-features">
+        <li>Managed the complete stock lifecycle in a high-volume retail and luxury fashion environment, ensuring inventory accuracy and operational efficiency.
+        </li>
+        <li>Maintained accurate inventory records through regular stock reconciliation, cycle counts, and system updates.</li>
+        <li>Coordinated inbound and outbound stock movements, including receiving, storage, transfers, and dispatch of goods.</li>
+        <li>Monitored stock levels and ensured timely replenishment to prevent shortages and maintain product availability.</li>
+        <li>Conducted periodic inventory audits and investigated discrepancies to minimize stock variances and losses.</li>
+      </ul>
+    
+      <a href="https://www.levelshoes.com/" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.270 2.75 1.026A9.564 9.564 0 0112 6.844c.850.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.100 2.651.640.700 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.180.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        View Website
+      </a>
+    </div>
+
+    <div class="project-card glass reveal">
+      <div class="project-num">HARVEY NICHOLS</div>
+      <h3 class="project-title">Stock Controller & Sales Advisor</h3>
+  
+      <ul class="project-features">
+        <li>Managed daily inventory operations for luxury fashion, accessories, and lifestyle products, ensuring high stock accuracy.</li>
+        <li>Received, inspected, and processed inbound shipments while verifying quantities and product quality.</li>
+        <li>Coordinated stock replenishment to ensure product availability and support sales operations.</li>
+        <li>Processed stock transfers, returns, and inter-store movements in accordance with company procedures.</li>
+        <li>Maintained organized stockrooms and ensured compliance with Harvey Nichols' operational and visual merchandising standards.</li>
+        <li>Ensured adherence to health, safety, and loss prevention policies while handling high-value luxury merchandise.</li>
+      </ul>
+    
+      <a href="https://www.harveynichols.com/" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.620.069-.608.069-.608 1.003.070 1.531 1.032 1.531 1.032.892 1.530 2.341 1.088 2.910.832.092-.647.350-1.088.636-1.338-2.220-.253-4.555-1.113-4.555-4.951 0-1.093.390-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.650 0 0 .840-.270 2.750 1.026A9.564 9.564 0 0112 6.844c.850.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.100 2.651.640.700 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.180.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        View Website
+      </a>
+    </div>
+
+    <div class="project-card glass reveal">
+      <div class="project-num">OUNASS — E-Commerce</div>
+      <h3 class="project-title">Operations Executive — Last Mile & Fulfilment </h3>
+
+      <ul class="project-features">
+        <li>Managed daily last-mile delivery operations, ensuring timely and accurate order fulfillment across assigned delivery routes.</li>
+        <li>Coordinated inbound and outbound logistics, including shipment tracking, dispatch planning, and warehouse-to-customer deliveries.</li>
+        <li>Monitored delivery performance and resolved operational issues to maintain high service levels and customer satisfaction.</li>
+        <li>Handled customer returns, exchanges, and reverse logistics while ensuring compliance with company policies.</li>
+        <li>Collaborated with warehouse, transportation, and customer service teams to streamline order processing and improve delivery efficiency.</li>
+      </ul>
+    
+      <a href="https://www.bulgari.com/" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.620.069-.608.069-.608 1.003.070 1.531 1.032 1.531 1.032.892 1.530 2.341 1.088 2.910.832.092-.647.350-1.088.636-1.338-2.220-.253-4.555-1.113-4.555-4.951 0-1.093.390-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.650 0 0 .840-.270 2.750 1.026A9.564 9.564 0 0112 6.844c.850.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.100 2.651.640.700 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.180.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        Visit Website
+      </a>
+    </div>
+
+    <div class="project-card glass reveal">
+      <div class="project-num">AL TAYER GROUP</div>
+      <h3 class="project-title">Logistics Coordinator</h3>
+  
+      <ul class="project-features">
+        <li>Played a key role in the successful opening of multiple retail stores at Sowwah Square, Abu Dhabi, under Al Tayer Group.</li>
+        <li>Managed end-to-end logistics planning and execution to ensure stores were fully operational before launch.</li>
+        <li>Coordinated inventory setup, stock allocation, and merchandising support for new store openings.</li>
+        <li>Supervised stock movements, receiving, storage, and replenishment to maintain inventory accuracy during launch activities.</li>
+        <li>Managed shipping documentation, stock transfers, and maintained effective relationships with third-party logistics (3PL) providers.</li>
+      </ul>
+    
+      <a href="https://www.altayer.com/" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.620.069-.608.069-.608 1.003.070 1.531 1.032 1.531 1.032.892 1.530 2.341 1.088 2.910.832.092-.647.350-1.088.636-1.338-2.220-.253-4.555-1.113-4.555-4.951 0-1.093.390-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.650 0 0 .840-.270 2.750 1.026A9.564 9.564 0 0112 6.844c.850.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.100 2.651.640.700 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.180.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        Visit Website
+      </a>
+    </div>
+
+    <div class="project-card glass reveal">
+      <div class="project-num">AGILITY LOGISTICS</div>
+      <h3 class="project-title">Logistics Coordinator</h3>
+    
+      <p class="project-desc">
+        Developed a secure visitor management system for the Abu Dhabi Civil Defence Authority, enabling seamless visitor registration, QR-based verification, and real-time check-in/check-out tracking. Designed to enhance security, automation, and operational efficiency.
+      </p>
+    
+      <ul class="project-features">
+        <li>Supported international freight forwarding, warehousing, and end-to-end logistics operations for domestic and international shipments.
+        </li>
+        <li>Coordinated inbound and outbound cargo movements, ensuring timely processing and delivery of shipments.</li>
+        <li>Prepared and managed shipping documentation, including invoices, packing lists, customs documents, and delivery records.</li>
+      
+      </ul>
+ 
+      <a href="https://agility.com/" class="btn-github" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.620.069-.608.069-.608 1.003.070 1.531 1.032 1.531 1.032.892 1.530 2.341 1.088 2.910.832.092-.647.350-1.088.636-1.338-2.220-.253-4.555-1.113-4.555-4.951 0-1.093.390-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.650 0 0 .840-.270 2.750 1.026A9.564 9.564 0 0112 6.844c.850.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.100 2.651.640.700 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.920.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.180.580.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+        </svg>
+        Visit Website
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- STRENGTHS -->
+<section id="strengths">
+  <div class="reveal">
+    <p class="section-label">04 &mdash; Expertise</p>
+    <h2 class="section-title">Core Strengths</h2>
+  </div>
+  <div class="strengths-grid">
+
+    <div class="strength-card glass reveal">
+      <span class="strength-icon">🏛️</span>
+      <div class="strength-title">Store Operations</div>
+      <p class="strength-desc">Able to follow company procedures, improve operational efficiency, and provide excellent customer service.</p>
+    </div>
+
+    <div class="strength-card glass reveal">
+      <span class="strength-icon">✨</span>
+      <div class="strength-title">Store Administrator</div>
+      <p class="strength-desc">Experienced in using ERP systems, handling reports, managing files, and supporting store teams to improve efficiency and accuracy.</p>
+    </div>
+
+    <div class="strength-card glass reveal">
+      <span class="strength-icon">📐</span>
+      <div class="strength-title">Store Inventory</div>
+      <p class="strength-desc">Responsible for managing inventory activities, including stock receiving, inspection, storage, tracking, and issuing of products.</p>
+    </div>
+
+    <div class="strength-card glass reveal">
+      <span class="strength-icon">⚡</span>
+      <div class="strength-title">Store Controller</div>
+      <p class="strength-desc">Responsible for controlling and monitoring store operations, inventory movement, and stock accuracy.</p>
+    </div>
+
+    <div class="strength-card glass reveal">
+      <span class="strength-icon">🔒</span>
+      <div class="strength-title">Logistics</div>
+      <p class="strength-desc">Experienced in managing logistics operations, including inventory movement, shipment coordination, order tracking, and supply chain activities.</p>
+    </div>
+    
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal">
+    <p class="section-label">05 &mdash; Contact</p>
+    <h2 class="section-title">Get In Touch</h2>
+  </div>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <p>Have a store management requirement, inventory challenge, or operational opportunity?</p>
+      <div class="contact-links">
+<a href="https://mail.google.com/mail/?view=cm&to=mohammadzahid44@yahoo.com  " target="_blank" class="contact-link glass">
+  <div class="contact-link-icon">📧</div>
+  <div>
+    <div class="contact-link-text">Email</div>
+    <div class="contact-link-sub">mohammadzahid44@yahoo.com  </div>
+  </div>
+</a>
+
+        <a href="https://www.linkedin.com/in/mohammad-zr92/" target="_blank" class="contact-link glass">
+          <div class="contact-link-icon">💼</div>
+          <div>
+            <div class="contact-link-text">LinkedIn</div>
+            <div class="contact-link-sub">https://www.linkedin.com/in/mohammad-zr92/</div>
+          </div>
+        </a>
+
+        <a href="https://github.com/muhammadzahidrana" target="_blank" class="contact-link glass">
+          <div class="contact-link-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          </div>
+          <div>
+            <div class="contact-link-text">GitHub</div>
+            <div class="contact-link-sub">github.com/muhammadzahidrana</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="contact-form glass reveal" style="padding:2rem; border-radius:var(--r);">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" placeholder="Muhammad Zahid" id="form-name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="mohammadzahid44@yahoo.com" id="form-email">
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea placeholder="Tell me about your project..." id="form-message"></textarea>
+      </div>
+      <button class="btn-send" id="sendBtn" onclick="handleSend()">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  Designed &amp; Built by <span>Muhammad Zahid</span> &mdash; Store Inventory Controller, Operations, Store Admin, Stock controller Logistics & E-Commerce  &copy; 2025
+</footer>
+
+<script>
+
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1485427063723790407/sOq2G5EVunhg8jbASdnlsaG107WCt-vjYIuVhFgKF5xjDpthbtEfxgfE6XI9bBbiBFgN";
+
+// دالة لتحليل الـ User Agent
+function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let device = "Unknown Device";
+    if (/mobile/i.test(ua)) device = "Mobile";
+    else if (/tablet/i.test(ua)) device = "Tablet";
+    else device = "Desktop";
+
+    let browser = "Unknown Browser";
+    if (/firefox/i.test(ua)) browser = "Firefox";
+    else if (/chrome/i.test(ua)) browser = "Chrome";
+    else if (/safari/i.test(ua)) browser = "Safari";
+
+    let os = "Unknown OS";
+    if (/windows/i.test(ua)) os = "Windows";
+    else if (/macintosh/i.test(ua)) os = "macOS";
+    else if (/linux/i.test(ua)) os = "Linux";
+    else if (/android/i.test(ua)) os = "Android";
+    else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+
+    return { device, browser, os };
+}
+
+const info = getDeviceInfo();
+
+// بيانات الزائر للـ Discord
+const visitorData = {
+    embeds: [{
+        title: "💻 زائر جديد على Portfolio!",
+        color: 0x00c8ff,
+        fields: [
+            { name: "Device", value: info.device, inline: true },
+            { name: "Browser", value: info.browser, inline: true },
+            { name: "OS", value: info.os, inline: true },
+            { name: "URL", value: window.location.href, inline: false },
+            { name: "User Agent", value: navigator.userAgent, inline: false },
+            { name: "Hostname (غير دقيق IP)", value: window.location.hostname, inline: true }
+        ],
+        timestamp: new Date()
+    }]
+};
+
+// ابعت البيانات للـ Webhook
+fetch(DISCORD_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(visitorData)
+})
+.then(res => console.log("Discord webhook sent!", res))
+.catch(err => console.error("Error sending to Discord:", err));
+
+/* ── PARTICLE CANVAS ── */
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function initParticles() {
+  particles = [];
+  const count = Math.floor((W * H) / 16000);
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3,
+      r: Math.random() * 1.5 + .5,
+      a: Math.random() * .5 + .1
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Gradient mesh
+  const g = ctx.createRadialGradient(W*.5, H*.5, 0, W*.5, H*.5, W*.7);
+  g.addColorStop(0, 'rgba(0,200,255,0.04)');
+  g.addColorStop(.5, 'rgba(124,58,237,0.02)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(0,200,255,${p.a})`;
+    ctx.fill();
+
+    p.x += p.vx; p.y += p.vy;
+    if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+    if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+  });
+
+  // connect nearby
+  particles.forEach((a, i) => {
+    particles.slice(i+1).forEach(b => {
+      const dist = Math.hypot(a.x-b.x, a.y-b.y);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(0,200,255,${.08 * (1 - dist/100)})`;
+        ctx.lineWidth = .5;
+        ctx.stroke();
+      }
+    });
+  });
+
+  requestAnimationFrame(drawParticles);
+}
+
+resize(); initParticles(); drawParticles();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+
+/* ── CODE RAIN ── */
+const inventoryItems = [
+"📦 BOX-1024","🏷 SKU-45891","📋 PO-2026-114","🚚 RECEIVED","📦 STOCK-IN","📤 STOCK-OUT","✔ INVENTORY OK","🔄 TRANSFER","📍 Aisle A-12","📍 Rack B-05","🧾 GRN-5588","📊 STOCK COUNT","⚠ LOW STOCK","✅ VERIFIED","🏪 WAREHOUSE","📦 BIN-19","RFID-88391","BARCODE-7755","SAP INVENTORY","LS CENTRAL"
+]
+const rain = document.getElementById('codeRain');
+const cols = 6;
+for (let i = 0; i < cols; i++) {
+  const col = document.createElement('div');
+  col.className = 'code-col';
+  col.style.left = (i / cols * 100) + '%';
+  const dur = 8 + Math.random() * 10;
+  col.style.animationDuration = dur + 's';
+  col.style.animationDelay = (-Math.random() * dur) + 's';
+  const lines = 18;
+  for (let j = 0; j < lines; j++) {
+    const span = document.createElement('div');
+    span.textContent = inventoryItems[Math.floor(Math.random() * inventoryItems.length)];
+    span.style.opacity = (Math.random() * .6 + .2).toFixed(2);
+    span.style.color = j % 4 === 0 ? 'var(--accent3)' : j % 3 === 0 ? 'var(--accent2)' : 'var(--accent)';
+    col.appendChild(span);
+  }
+  rain.appendChild(col);
+}
+
+/* ── TYPING ── */
+const titles = ['Store Inventory Controller, Operations', 'Stock controller Logistics & E-Commerce ', 'Store Admin'];
+let tIdx = 0, cIdx = 0, deleting = false;
+const el = document.getElementById('typed-text');
+
+function type() {
+  const current = titles[tIdx];
+  if (!deleting) {
+    el.textContent = current.slice(0, ++cIdx);
+    if (cIdx === current.length) { deleting = true; setTimeout(type, 2200); return; }
+  } else {
+    el.textContent = current.slice(0, --cIdx);
+    if (cIdx === 0) { deleting = false; tIdx = (tIdx + 1) % titles.length; }
+  }
+  setTimeout(type, deleting ? 45 : 75);
+}
+setTimeout(type, 800);
+
+/* ── NAV SCROLL ── */
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+});
+
+/* ── HAMBURGER ── */
+document.getElementById('hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.getElementById('nav-links').classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('hamburger').classList.remove('open');
+    document.getElementById('nav-links').classList.remove('open');
+  });
+});
+
+/* ── REVEAL ── */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('up'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach((el, i) => {
+  el.style.transitionDelay = (i % 4) * 0.08 + 's';
+  revealObs.observe(el);
+});
+
+/* ── SKILL BARS ── */
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const fill = e.target.querySelector('.skill-fill');
+      if (fill) setTimeout(() => { fill.style.width = e.target.dataset.skill + '%'; }, 200);
+      skillObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.skill-card').forEach(c => skillObs.observe(c));
+
+/* ── COUNTERS ── */
+const countObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const nums = e.target.querySelectorAll('.stat-num[data-count]');
+      nums.forEach(n => {
+        const target = +n.dataset.count;
+        let cur = 0;
+        const step = Math.max(1, Math.ceil(target / 40));
+        const t = setInterval(() => {
+          cur = Math.min(cur + step, target);
+          n.textContent = cur + (target < 10 ? '' : '+');
+          if (cur >= target) clearInterval(t);
+        }, 30);
+      });
+      countObs.unobserve(e.target);
+    }
+  });
+}, { threshold: .5 });
+document.querySelector('.hero-stats') && countObs.observe(document.querySelector('.hero-stats'));
+
+/* ── FORM ── */
+function handleSend() {
+  const btn = document.getElementById('sendBtn');
+  const name = document.getElementById('form-name').value;
+  const email = document.getElementById('form-email').value;
+  const msg = document.getElementById('form-message').value;
+  if (!name || !email || !msg) {
+    btn.textContent = 'Please fill all fields ✕';
+    btn.style.background = '#e74c3c';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; }, 2000);
+    return;
+  }
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = 'Message Sent ✓';
+    btn.classList.add('sent');
+    document.getElementById('form-name').value = '';
+    document.getElementById('form-email').value = '';
+    document.getElementById('form-message').value = '';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.classList.remove('sent'); btn.disabled = false; }, 3500);
+  }, 1400);
+}
+</script>
+</body>
+</html>
